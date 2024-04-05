@@ -1689,6 +1689,13 @@
 
 // summary cta
 .summary-count-cta {
+  &.wIcon {
+    &+.summary-details {
+      .summary-title {
+        margin-bottom: 0;
+      }
+    }
+  }
 
   .summary-count,
   .summary-title,
@@ -2336,7 +2343,7 @@
         font-weight: $intro-bold;
         font-size: 18px;
         line-height: 18px;
-        text-transform: uppercase;
+        text-transform: capitalize;
         margin-bottom: 14px;
       }
 
@@ -3889,6 +3896,7 @@
 //credit-education-dashboard-faqs
 .ce-card {
   padding: 20px;
+  background-color: $white;
 
   &__wraper {
     p {

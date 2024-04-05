@@ -58,17 +58,71 @@ $(function () {
     $(".overlay").toggleClass('opened');
   });
 
-  $('.report-nav-link').click(function(){
-    $('.report-nav-link').removeClass('active');
-    $(this).addClass('active');
-    $('.report-content .tab-panel').removeClass('active');
-    $($(this).data('target')).addClass('active')
-    $('.custom-select-options span').removeClass("selected");
-    let selectElement = $('.custom-select-options span[data-target="'+$(this).data('target')+'"]')
-    selectElement.addClass('selected')
-    $('#report-select-value').html(selectElement.html())
-    checkAccountVisibility()
-    resetCompare()
+  // $('.report-nav-link').click(function(){
+  //   $('.report-nav-link').removeClass('active');
+  //   $(this).addClass('active');
+  //   $('.report-content .tab-panel').removeClass('active');
+  //   $($(this).data('target')).addClass('active')
+  //   $('.custom-select-options span').removeClass("selected");
+  //   let selectElement = $('.custom-select-options span[data-target="'+$(this).data('target')+'"]')
+  //   selectElement.addClass('selected')
+  //   $('#report-select-value').html(selectElement.html())
+  //   checkAccountVisibility()
+  //   resetCompare()
+  // })
+
+  $('.toggle-popup').click(function(e){
+    e.preventDefault();
+    let id = $(this).data('target');
+    $('#'+id).addClass('opened')
+  })
+  $('.popup-agree').click(function(e){
+    e.preventDefault()
+    $(this).parents('.popup').addClass('success')
+  })
+  $('.close-popup, .go-back').click(function(){
+    $(this).parents('.popup').removeClass('opened success')
+  })
+  $('#optionsAdded').change(function(){
+    if($(this).val() != ""){
+      // $('.smiluate-now-cta').removeClass('disabled')
+    }
+    else{
+      // $('.smiluate-now-cta').addClass('disabled')
+    }
+  })
+
+  // credit report your account carousel
+  var BannerTextCount = 0;
+  let interval = null;
+
+  $('.donut-chart-legends-item').hover(function (event) {
+    console.log($(event.target).find('.donut-chart-legends-item-hover').children())
+    const titleElements = $(event.target).find('.donut-chart-legends-item-hover').children();
+
+    interval = setInterval(function () {
+      BannerTextCount = BannerTextCount + 1;
+      if (BannerTextCount > titleElements.length - 1) {
+          BannerTextCount = 0;
+      }
+      titleElements.removeClass('active')
+      titleElements.eq(BannerTextCount).addClass('active')
+
+    }, 2000);
+  }, function () {
+    if (interval) {
+      clearInterval(interval)
+    }
+  })
+
+  //tabview
+  $('.enquiry-nav-item').click(function(){
+    // $('.enquiry-nav-link').removeClass('active');
+    $(this).siblings().children().removeClass('active');
+    $(this).children().addClass('active');
+
+    $($(this).children().data('target')).siblings().removeClass('active')
+    $($(this).children().data('target')).addClass('active')
   })
 
   $('.toggle-popup').click(function(e){
@@ -106,6 +160,31 @@ $(function () {
       }, 500);
     }
   });
+
+  $('.report-nav-item').click(function () {
+    $(this).siblings().children().removeClass('active');
+    $(this).children().addClass('active');
+    $($(this).children().data('target')).siblings().removeClass('active')
+    $($(this).children().data('target')).addClass('active')
+    // checkAccountVisibility()
+    // resetCompare()
+  })
+  // account information sidebar
+  $('.report-table .account-list li').click(function () {
+    $('.aSidebar-card').addClass('show');
+    $('.aSidebar-overlay').addClass('show');
+    $('body').addClass('modal-open');
+  })
+  $('.aSidebar-overlay').click(function () {
+    $('.aSidebar-card').removeClass('show');
+    $('.aSidebar-overlay').removeClass('show');
+    $('body').removeClass('modal-open');
+  })
+  $('.close-aSidebar').click(function () {
+    $('.aSidebar-card').removeClass('show');
+    $('.aSidebar-overlay').removeClass('show');
+    $('body').removeClass('modal-open');
+  })
 
   // enableAccountSlider();
 
@@ -166,7 +245,7 @@ function customSelectInput(element){
   $('.custom-select-input').find('.searchbox').slideUp('fast');
 
   /* $('.custom-select-input.opened').find('.custom-select-value').not($(element)).click(); */
-  
+
   $(element).toggleClass('opened')
   $(element).find('.custom-select-options').toggle('fast');
 }
@@ -438,3 +517,52 @@ function formatCurrency1(input){
   let value = parseInt($(input).val().replace(/[^\d]/g, ''))
   isNaN(value) ? $(input).val('') : $(input).val(value.toLocaleString('en-IN'))
 }
+
+//sorting & filter dropdown
+$(function () {
+  $(".sorting-click").click(function (e) {
+    $(".sorting-click, .sorting-drop").toggleClass("active");
+    $(".sorting-drop").toggle("medium");
+  });
+  $(document).click(function(){
+    $(".sorting-drop").hide("medium");
+    $(".overlay").removeClass("opened");
+  });
+  $(".sorting-drop, .sorting-click, .hamburger, .overview-toggle").click(function(e){
+    e.stopPropagation();
+  });
+  $(".sorting-drop .sorting-item").click(function(e){
+    $(".sorting-drop").toggle("medium");
+  });
+  $(".cibil-button").click(function () {
+    $(this).parent().find('sorting-click').removeClass("active");
+    setTimeout(function () {
+      $(".sorting-click, .sorting-drop").removeClass("active");
+      $(".sorting-drop").hide("medium");
+      $(".overlay").removeClass("opened");
+    }, 100);
+  });
+
+  $(".filter-click").click(function (e) {
+    $(".filter-click, .filter-drop").toggleClass("active");
+    $(".filter-drop").toggle("medium");
+  });
+  $(document).click(function(){
+    $(".filter-drop").hide("medium");
+    $(".overlay").removeClass("opened");
+  });
+  $(".filter-drop, .filter-click, .hamburger, .overview-toggle").click(function(e){
+    e.stopPropagation();
+  });
+  $(".filter-drop .filter-item").click(function(e){
+    $(".filter-drop").toggle("medium");
+  });
+  $(".cibil-button").click(function () {
+    $(this).parent().find('filter-click').removeClass("active");
+    setTimeout(function () {
+      $(".filter-click, .filter-drop").removeClass("active");
+      $(".filter-drop").hide("medium");
+      $(".overlay").removeClass("opened");
+    }, 100);
+  });
+});
